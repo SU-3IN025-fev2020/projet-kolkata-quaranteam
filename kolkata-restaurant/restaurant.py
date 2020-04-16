@@ -1,8 +1,12 @@
 from collections import deque
 
-def Restaurant:
-
+class Restaurant:
+    idgen = 1
+    
     def __init__(self, pos):
+        self.id = Restaurant.idgen
+        Restaurant.idgen += 1
+        
         self.pos = pos
         self.q = deque()
         
@@ -11,5 +15,7 @@ def Restaurant:
         
     def simulate(self):
         # Serves the next customer waiting
-        x = self.q.popleft()
-        x.score += 1
+        if self.q:
+            x = self.q.popleft()
+            x.score += 1
+            x.moving = False # Allows agent to move again

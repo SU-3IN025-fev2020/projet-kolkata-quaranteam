@@ -1,33 +1,48 @@
 from astar import *
+from utils import *
 import random
 
 class Agent:
+    idgen = 1
 
-    def __init__(self, player, pos, dims, dir_vecs, walls, strategy):
+    def __init__(self, player, dims, dir_vecs, walls, occupation, strategy):
+        self.id = Agent.idgen
+        Agent.idgen += 1
+        
         self.player = player
-        self.pos = pos
+        self.pos = random_position(dims)
         self.dims = dims
         self.dir_vecs = dir_vecs
         self.walls = walls
+        self.occupation = occupation
         self.strategy = strategy
         self.score = 0
+        self.current = 0
+        self.moving = False
+        self.goal_idx = -1
     
     def get_goal(self, restaurants, *args, **kwargs):
-        goal_idx = self.strategy(args, kwargs)
-        self.goal = restaurants[goal_idx]
+        if not self.moving:
+            self.goal_idx = self.strategy(*args, **kwargs)
+            self.goal = restaurants[self.goal_idx]
+            self.find_path()
+            self.moving = True
     
     def find_path(self):
         j = JeuRecherche(self.pos, self.goal.pos, distManhattan, self.dir_vecs, self.dims, self.walls)
         self.path = astar(j)
         self.current = 0
+        print("Player {} moving towards Restaurant {}.".format(self.id, self.goal.id))
     
     """Simulate a step towards the current goal."""
     def simulate(self):
         if(self.current < len(self.path)-1):
             self.current += 1
-            self.pos = self.path[self.current]
+            self.pos = self.path[self.current].etat #Object of type Node!
             next_row, next_col = self.pos
             self.player.set_rowcol(next_row, next_col)
+            if(self.current == len(self.path)-1):
+                self.goal.new_customer(self)
         
         
 # Define some strategies
