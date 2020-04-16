@@ -56,7 +56,7 @@ def main():
     n_restaurants = len(restaurants)
     occupation = [len(x.q) for x in restaurants]
     # Spawn players at a random location
-    agents = [Agent(p,dims,dir_vecs,wallStates,occupation,random_obstinate) for p in players]
+    agents = [Agent(p,dims,dir_vecs,wallStates,occupation,uniformly_random) for p in players]
     n_agents = len(agents)
     
     # Main loop
@@ -64,7 +64,8 @@ def main():
         time.sleep(0.05)
         # Have players choose a restaurant
         for agent in agents:
-            agent.get_goal(restaurants,n_restaurants,agent.goal_idx)
+            #agent.get_goal(restaurants,n_restaurants,agent.goal_idx)
+            agent.get_goal(restaurants, n_restaurants)
             # Chaque joueur se rend au restaurant de son choix en suivant le plus court chemin
             agent.simulate()
         # Quand tous les joueurs soient arrivés, ils obtiennent leur gain et prennent connaissance

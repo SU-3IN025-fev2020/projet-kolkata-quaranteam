@@ -17,5 +17,7 @@ class Restaurant:
         # Serves the next customer waiting
         if self.q:
             x = self.q.popleft()
+            #print("Restaurant {} processed agent {}".format(self.id, x.id))
             x.score += 1
             x.moving = False # Allows agent to move again
+            x.waiting = False

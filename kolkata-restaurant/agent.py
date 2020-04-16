@@ -10,7 +10,7 @@ class Agent:
         Agent.idgen += 1
         
         self.player = player
-        self.pos = random_position(dims)
+        self.pos = random_position(dims, walls)
         self.dims = dims
         self.dir_vecs = dir_vecs
         self.walls = walls
@@ -19,6 +19,7 @@ class Agent:
         self.score = 0
         self.current = 0
         self.moving = False
+        self.waiting = False
         self.goal_idx = -1
     
     def get_goal(self, restaurants, *args, **kwargs):
@@ -41,8 +42,9 @@ class Agent:
             self.pos = self.path[self.current].etat #Object of type Node!
             next_row, next_col = self.pos
             self.player.set_rowcol(next_row, next_col)
-            if(self.current == len(self.path)-1):
-                self.goal.new_customer(self)
+        if(self.current >= len(self.path)-1 and not self.waiting):
+            self.goal.new_customer(self)
+            self.waiting = True
         
         
 # Define some strategies
