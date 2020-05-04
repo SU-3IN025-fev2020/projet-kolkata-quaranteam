@@ -3,12 +3,13 @@ from utils import *
 import random
 
 class Agent:
+    """Class representing an agent."""
     idgen = 1
 
-    def __init__(self, player, dims, dir_vecs, walls, occupation, strategy):
+    def __init__(self, player, dims, dir_vecs, walls, occupation, strategy, verbose=False):
+        """Initialize the agent."""
         self.id = Agent.idgen
         Agent.idgen += 1
-        
         self.player = player
         self.pos = random_position(dims, walls)
         self.dims = dims
@@ -21,8 +22,10 @@ class Agent:
         self.moving = False
         self.waiting = False
         self.goal_idx = -1
+        self.verbose = verbose
     
     def get_goal(self, restaurants, *args, **kwargs):
+        """Get goal from current strategy."""
         if not self.moving:
             self.goal_idx = self.strategy(*args, **kwargs)
             self.goal = restaurants[self.goal_idx]
@@ -30,13 +33,15 @@ class Agent:
             self.moving = True
     
     def find_path(self):
+        """Find path towards current goal."""
         j = JeuRecherche(self.pos, self.goal.pos, distManhattan, self.dir_vecs, self.dims, self.walls)
         self.path = astar(j)
         self.current = 0
-        print("Player {} moving towards Restaurant {}.".format(self.id, self.goal.id))
+        if(self.verbose):
+            print("Player {} moving towards Restaurant {}.".format(self.id, self.goal.id))
     
-    """Simulate a step towards the current goal."""
     def simulate(self):
+        """Simulate a step towards the current goal."""
         if(self.current < len(self.path)-1):
             self.current += 1
             self.pos = self.path[self.current].etat #Object of type Node!

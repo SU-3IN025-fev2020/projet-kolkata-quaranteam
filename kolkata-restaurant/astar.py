@@ -153,9 +153,8 @@ class Noeud:
 
 
 def astar(p,verbose=False,stepwise=False):
-    """
-    application de l'algorithme a-star
-    sur un probleme donné
+    """ Application de l'algorithme a-star
+        sur un probleme donné
         """
         
     startTime = time.time()
@@ -165,9 +164,7 @@ def astar(p,verbose=False,stepwise=False):
     bestNoeud = nodeInit
     
     while frontiere != [] and not p.estBut(bestNoeud.etat):              
-        (min_f,bestNoeud) = heapq.heappop(frontiere)
-    # VERSION 1 --- On suppose qu'un noeud en réserve n'est jamais ré-étendu
-    # Hypothèse de consistence de l'heuristique        
+        (min_f,bestNoeud) = heapq.heappop(frontiere)     
         
         if p.immatriculation(bestNoeud.etat) not in reserve:            
             reserve[p.immatriculation(bestNoeud.etat)] = bestNoeud.g #maj de reserve
@@ -176,7 +173,7 @@ def astar(p,verbose=False,stepwise=False):
                 f = n.g+p.h_value(n.etat,p.but)
                 heapq.heappush(frontiere, (f,n))
 
-    # TODO: VERSION 2 --- Un noeud en réserve peut revenir dans la frontière        
+    # Un noeud en réserve peut revenir dans la frontière        
         
         stop_stepwise=""
         if stepwise==True:
@@ -186,8 +183,6 @@ def astar(p,verbose=False,stepwise=False):
             print ("Réserve:", reserve)
             if stop_stepwise=="s":
                 stepwise=False
-    
-    #bestNoeud.trace(p)
             
     # Mode verbose            
     # Affichage des statistiques (approximatives) de recherche   
