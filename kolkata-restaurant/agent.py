@@ -24,10 +24,12 @@ class Agent:
         self.goal_idx = -1
         self.verbose = verbose
     
-    def get_goal(self, restaurants, *args, **kwargs):
+    def get_goal(self, restaurants, **kwargs):
         """Get goal from current strategy."""
         if not self.moving:
-            self.goal_idx = self.strategy(*args, **kwargs)
+            # Some keyword argument juggling
+            kwargs.update({'pos': self.pos, 'last': self.goal_idx, 'restaurants': restaurants})
+            self.goal_idx = self.strategy(**kwargs)
             self.goal = restaurants[self.goal_idx]
             self.find_path()
             self.moving = True
@@ -50,18 +52,3 @@ class Agent:
         if(self.current >= len(self.path)-1 and not self.waiting):
             self.goal.new_customer(self)
             self.waiting = True
-        
-        
-# Define some strategies
-
-def random_obstinate(n, previous):
-    return previous if (previous != -1) else random.randint(0,n-1)
-    
-def uniformly_random(n):
-    return random.randint(0,n-1)
-
-def min_occupation(n, occupation):
-    pass
-
-def min_occupation_min_distance(n, occupation, restaurants):
-    pass
