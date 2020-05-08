@@ -1,6 +1,7 @@
 import random
 
 def random_position(dims, walls):
+    """Returns a random valid position."""
     r,c = dims
     pos = (random.randint(0,r-1), random.randint(0,c-1))
     while(pos in walls):

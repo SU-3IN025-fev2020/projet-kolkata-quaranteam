@@ -1,5 +1,7 @@
 # Strategies (we want a uniform function signature)
 import numpy as np
+import random
+
 from utils import *
 
 def random_obstinate(pos, last, n, restaurants, occupation):
@@ -8,25 +10,33 @@ def random_obstinate(pos, last, n, restaurants, occupation):
 def uniformly_random(pos, last, n, restaurants, occupation):
     return random.randint(0,n-1)
 
+# Strategies with pooling (to avoid clumps of agents)
+
 def min_distance(pos, last, n, restaurants, occupation):
     dists = [distManhattan(pos,r.pos) for r in restaurants]
-    choice = 0
+    pool = [0]
     for i in range(1,len(dists)):
-        if(dists[i] < dists[choice]):
-            choice = i
-    return choice
+        if(dists[i] < dists[pool[0]]):
+            pool = [i]
+        elif (dists[i] == dists[pool[0]]):
+            pool.append(i)
+    return random.choice(pool)
 
 def min_occupation_forgetful(pos, last, n, restaurants, occupation):
-    choice = 0
+    pool = [0]
     for i in range(1,n):
-        if(occupation[i][-1] < occupation[choice][-1]):
-            choice = i
-    return choice
+        if(occupation[i][-1] < occupation[pool[0]][-1]):
+            pool = [i]
+        elif(occupation[i][-1] == occupation[pool[0]][-1]):
+            pool.append(i)
+    return random.choice(pool)
 
 def min_occupation_avg(pos, last, n, restaurants, occupation):
-    avgs = [np.average(o) for o in occupation] #TO DO: Calculate averages
-    choice = 0
+    avgs = [np.average(o) for o in occupation]
+    pool = [0]
     for i in range(1,n):
-        if(avgs[i] < avgs[choice]):
-            choice = i
-    return choice
+        if(avgs[i] < avgs[pool[0]]):
+            pool = [i]
+        elif(avgs[i] == avgs[pool[0]]):
+            pool.append(i)
+    return random.choice(pool)
