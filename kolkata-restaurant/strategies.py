@@ -40,3 +40,9 @@ def min_occupation_avg(pos, last, n, restaurants, occupation):
         elif(avgs[i] == avgs[pool[0]]):
             pool.append(i)
     return random.choice(pool)
+    
+def stochastic(pos, last, n, restaurants, occupation):
+    z = 0 # NEEDS IMPLEMENTATION
+    choice = 0
+    probs = [0 for r in restaurants]
+    return choice

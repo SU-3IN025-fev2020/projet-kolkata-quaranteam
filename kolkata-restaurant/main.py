@@ -62,8 +62,8 @@ def simulate(n, strats, iterations=100, verbose=False):
         # Quand les joueurs soient arrivés, ils obtiennent leur gain et prennent connaissance
         # des taux de remplissage de chaque restaurant
         for restaurant,r in zip(restaurants, range(len(restaurants))):
+            occupation[r].append(len(restaurant.q)) # Record info BEFORE simulation
             restaurant.simulate()
-            occupation[r].append(len(restaurant.q))
         # More efficient memorywise to keep a global tracker of occupation
         game.mainiteration()
     
@@ -83,7 +83,7 @@ def simulate(n, strats, iterations=100, verbose=False):
                     'max': max(scores[start:end]), \
                     'min': min(scores[start:end])}
     for i in range(len(restaurants)):
-        stats['restaurant '+str(i+1)] = occupation[r]
+        stats['restaurant '+str(i+1)] = occupation[i]
     stats['restaurants']['avg'] = np.average((np.array(occupation)).flatten())
     if (verbose):
         print(r"Cumulative: {} - Average: {} - Max: {} - Min: {}".format(cumulative, avg, max_score, min_score))
