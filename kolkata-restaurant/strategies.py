@@ -42,7 +42,6 @@ def min_occupation_avg(pos, last, n, restaurants, occupation):
     return random.choice(pool)
     
 def stochastic(pos, last, n, restaurants, occupation):
-    z = 0 # NEEDS IMPLEMENTATION
-    choice = 0
-    probs = [0 for r in restaurants]
-    return choice
+    z = np.sum([np.exp(-occupation[k][-1]) for k in range(n)])
+    probs = [(np.exp(-occupation[k][-1]))/z for k in range(n)]
+    return np.random.choice(range(n),p=probs)
